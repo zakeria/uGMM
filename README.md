@@ -4,7 +4,7 @@
 
 ## uGMM-NN: A Deep Probabilistic Neural Network with Univariate Gaussian Mixture Neurons
 
-This repository introduces the **Univariate Gaussian Mixture Model Neural Network Model (uGMM-NN)**. This experimental feedforward neural network architecture replaces traditional neuron operations with **probabilistic univariate Gaussian mixture nodes**. While primarily designed for generative learning using Negative Log-Likelihood (NLL) loss, the model also performs well in discriminative settings.
+This repository introduces the **Univariate Gaussian Mixture Model Neural Network Model (uGMM-NN)**. This experimental feedforward neural network architecture replaces traditional neuron operations with **probabilistic univariate Gaussian mixture nodes**. By parameterizing neurons with means, variances, and mixing coefficients, uGMM-NNs capture multimodality and uncertainty that standard MLP neurons cannot represent. This mixture-based view allows richer probabilistic reasoning within deep neural networks, making them especially promising as building blocks for next-generation architectures.
 
 ---
 
@@ -29,19 +29,15 @@ An example illustration of the architecture is shown below.
 
 The `notebooks` directory contains Jupyter notebooks that demonstrate the usage of this library.
 
-- [Example (generative) inference on the Iris dataset using a uGMM trained with NLL loss.](./notebooks/iris_dataset.ipynb)
 - [Example (discriminative) inference on the MNIST dataset](./notebooks/mnist_dataset.ipynb)
+- [Example (generative) inference on the Iris dataset using a uGMM trained with NLL loss.](./notebooks/iris_dataset.ipynb)
 
-### Limitations and Future Work
-
-While promising, the current uGMM-NN architecture has the following limitations:
-
-* **Lack of Efficient MPE Inference:** Efficient Most Probable Explanation (MPE) inference is currently challenging due to the continuous GMM components and complex inter-layer interactions. Developing approximate methods for MPE is crucial for generative tasks like sampling, and efficient inference.
-
+### Future Work
 Future research directions include:
 
-* **Architectural Extensions**: Redesigning classical deep learning architectures such as recurrent neural networks (RNNs), convolutional neural networks (CNNs), and transformers using uGMM neurons may enable fully probabilistic versions of these models.
-* **Efficient MPE and Marginal Inference:** Developing novel algorithms for MPE and marginal inference.
+* **Architectural Extensions**: Redesigning classical deep learning architectures, such as recurrent neural networks (RNNs) and Transformers using uGMM neurons may enable fully probabilistic, uncertainty-aware versions of these models. By replacing traditional MLP layers with uGMM layers, each neuron can propagate multi-modal hypotheses through the network, allowing richer latent representations and probabilistic reasoning at every layer. Such extensions could enhance the network’s robustness to ambiguous or noisy inputs and improve interpretability by exposing which mixture components dominate decisions.
+
+* For a **generatively trained** uGMM-NN, computing the Most Probable Explanation (MPE) is challenging due to the continuous Gaussian components and complex inter-layer dependencies. While this may limit appeal for probabilistic circuit applications, for standard deep learning use cases such as replacing MLP layers with uGMM layers in discriminative networks, this limitation does not apply.
 ---
 ### Related Work
 * Peharz, R., Lang, S., Vergari, A., Stelzner, K., Molina, A., Trapp, M., Van den Broeck, G., Kersting, K., and Ghahramani, Z. Einsum networks: Fast and scalable learning of tractable probabilistic circuits. In *Proceedings of the 37th International Conference on Machine Learning (ICML)*. 2020.
