@@ -1,5 +1,12 @@
-import torch
+import sys
+import os
+cwd = os.getcwd()
+parent_dir = os.path.abspath(os.path.join(cwd, '..'))
+sys.path.append(parent_dir)
+
 from test_architectures import *
+
+import torch
 from torch import nn
 import torch.nn.functional as F
 
@@ -8,21 +15,14 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-import numpy as np
-
-import random
-
-torch.set_printoptions(sci_mode=False)
-
-def predictNLLMPE(spn, data, label, device, epoch):
-    mpe = spn.infer_mpe(data, mpe_vars=[4], mpe_states=[0.,1.,2.])
+def predictNLLMPE(model, data, label, device, epoch):
+    mpe = model.infer_mpe(data, mpe_vars=[4], mpe_states=[0.,1.,2.])
     predictions = mpe.argmax(dim=0).squeeze()
     accuracy = (predictions == label).sum() / len(label)
     print(f'epoch: {epoch}%, MPE Accuracy: {accuracy}%')
 
 def Classify_iris_nll():
-      device = "cpu"
-      # device = "cuda"
+      device = "cuda"
       random_seed = 0
       torch.manual_seed(random_seed)
       features, label = load_iris(return_X_y=True)
@@ -32,13 +32,13 @@ def Classify_iris_nll():
       label = torch.tensor(label, dtype=torch.int).to(device)
       data = torch.cat([features, label.unsqueeze(1).int()], dim=1).to(device)
 
-      spn = iris_nll_gmm(device)
-      optimizer = torch.optim.Adam(spn.parameters(), lr=0.001)
+      model = iris_nll_gmm(device)
+      optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
       test = True
       for i in range(1000000):
             optimizer.zero_grad()
-            output = spn.infer(data, training=True)
+            output = model.infer(data, training=True)
             loss = -1 * output.mean()
             loss.backward()
             optimizer.step()
@@ -47,7 +47,7 @@ def Classify_iris_nll():
                   print("log-likelihood: {output.sum().item():10.4f}")
 
                   if test:
-                        predictNLLMPE(spn, data, label, device, i)
+                        predictNLLMPE(model, data, label, device, i)
 
 class MLP(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):

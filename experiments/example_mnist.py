@@ -1,3 +1,9 @@
+import sys
+import os
+cwd = os.getcwd()
+parent_dir = os.path.abspath(os.path.join(cwd, '..'))
+sys.path.append(parent_dir)
+
 from test_architectures import *
 
 import torch
@@ -48,7 +54,7 @@ def mnistFF():
         transforms.ToTensor(),
     ])    
 
-    batch_size = 256
+    batch_size = 128
 
     train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -60,7 +66,14 @@ def mnistFF():
 
     model = MLP()
     model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        optimizer, 
+        milestones=[20, 45, 60],
+        gamma=0.1
+    )
+    
     criterion = nn.CrossEntropyLoss()
 
     num_epochs = 100
@@ -77,14 +90,14 @@ def mnistFF():
         testAccuracyFF(model, test_loader, batch_size, device)
         print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {loss.item()}')
         model.train() 
+        scheduler.step()
 
 def mnistCrossEntropy():    
     transform = transforms.Compose([
         transforms.ToTensor(),
     ])    
     torch.manual_seed(0)
-    batch_size = 256
-
+    batch_size = 128
     train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
@@ -93,8 +106,14 @@ def mnistCrossEntropy():
 
     device = "cuda"
 
-    model = mnist_spn_cross_entropy(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    model = mnist_cross_entropy(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
+
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        optimizer, 
+        milestones=[20, 45, 60],
+        gamma=0.1
+    )
     criterion = nn.CrossEntropyLoss()
 
     num_epochs = 100
@@ -108,22 +127,22 @@ def mnistCrossEntropy():
             loss = criterion(output, labels.to(device))         
             
             loss.backward()  
-            optimizer.step()            
-            
+            optimizer.step()
+
         print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {loss.item()}')
         testAccuracyCrossEntropy(model, test_loader, device)
+        scheduler.step()
 
 
-def testAccuracyCrossEntropy(spn, test_loader, device):
+def testAccuracyCrossEntropy(model, test_loader, device):
         correct, total = 0, 0
         with torch.no_grad():
             for batch_idx, (test_batch_data, test_batch_labels) in enumerate(test_loader):
                 batch_size = test_batch_data.shape[0]
                 data = test_batch_data.reshape(batch_size, 28*28)
                 data = data.to(device)
-                mpe = spn.infer(data)
-
-                predictions = mpe.argmax(dim=1)
+                output = model.infer(data, training = False)
+                predictions = output.argmax(dim=1)
                 labels = test_batch_labels.to(device)
                 total += labels.size(0)
                 correct += (predictions == labels).sum().item()

@@ -4,14 +4,14 @@ from model_defs import *
 
 from torch import distributions as dist
 
-from spn import *
+from ugmm_net import Layer
 
-class GMixture(Layer): 
-    def __init__(self, prev_layer, n_prod_nodes, dropout=0.0):
-        super(GMixture, self).__init__(dropout)
-        self.type = TYPE_GPRODUCT
+class uGMMLayer(Layer): 
+    def __init__(self, prev_layer, n_ugmm_nodes, dropout=0.0):
+        super(uGMMLayer, self).__init__(dropout)
+        self.type = TYPE_UGMM_LAYER
         self.prev_layer = prev_layer
-        self.n_nodes = n_prod_nodes
+        self.n_nodes = n_ugmm_nodes
         self.n_input_variables = prev_layer.n_nodes 
         self.dropout = dropout
 

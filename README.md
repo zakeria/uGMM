@@ -2,7 +2,7 @@
   <img src="./images/logo.png" alt="uGMM Logo" width="300"/>
 </p>
 
-## uGMM-NN: A Deep Probabilistic Neural Network with Univariate Gaussian Mixture Neurons
+## Univariate Gaussian Mixture Model Neural Network (uGMM-NN)
 
 This repository introduces the **Univariate Gaussian Mixture Model Neural Network Model (uGMM-NN)**. This experimental feedforward neural network architecture replaces traditional neuron operations with **probabilistic univariate Gaussian mixture nodes**. By parameterizing neurons with means, variances, and mixing coefficients, uGMM-NNs capture multimodality and uncertainty that standard MLP neurons cannot represent. This mixture-based view allows richer probabilistic reasoning within deep neural networks, making them especially promising as building blocks for next-generation architectures.
 
@@ -18,26 +18,18 @@ A uGMM neuron j receives N inputs (x₁, ..., xₙ) from the previous layer.
 Its associated Gaussian Mixture Model has exactly N components, 
 each corresponding to one input. The means (μⱼ,ₖ), variances (σ²ⱼ,ₖ), and mixing coefficients (πⱼ,ₖ) are learnable parameters unique to neuron j.
 
-### Example Usage
-
-The uGMM-NN follows a classic feedforward neural network architecture, comprising input, hidden, and output layers. Each neuron in the network represents a univariate Gaussian mixture model (uGMM), where the mixture components correspond to inputs from the previous layer. Conceptually, the model forms a hierarchical composition of uGMMs, enabling the construction of complex, high-dimensional probability distributions through successive transformations.
-
-An example illustration of the architecture is shown below.
 <p align="center">
   <img src="./images/model_architecture.png" alt="example model architecture" width="300"/>
 </p>
+
+### Example Usage
+
+The uGMM-NN follows a classic feedforward neural network architecture, comprising input, hidden, and output layers. Each neuron in the network represents a univariate Gaussian mixture model (uGMM), where the mixture components correspond to inputs from the previous layer. Conceptually, the model forms a hierarchical composition of uGMMs, enabling the construction of complex, high-dimensional probability distributions through successive transformations.
 
 The `notebooks` directory contains Jupyter notebooks that demonstrate the usage of this library.
 
 - [Example (discriminative) inference on the MNIST dataset](./notebooks/mnist_dataset.ipynb)
 - [Example (generative) inference on the Iris dataset using a uGMM trained with NLL loss.](./notebooks/iris_dataset.ipynb)
-
-### Future Work
-Future research directions include:
-
-* **Architectural Extensions**: Redesigning classical deep learning architectures, such as recurrent neural networks (RNNs) and Transformers using uGMM neurons may enable fully probabilistic, uncertainty-aware versions of these models. By replacing traditional MLP layers with uGMM layers, each neuron can propagate multi-modal hypotheses through the network, allowing richer latent representations and probabilistic reasoning at every layer. Such extensions could enhance the network’s robustness to ambiguous or noisy inputs and improve interpretability by exposing which mixture components dominate decisions.
-
-* For a **generatively trained** uGMM-NN, computing the Most Probable Explanation (MPE) is challenging due to the continuous Gaussian components and complex inter-layer dependencies. While this may limit appeal for probabilistic circuit applications, for standard deep learning use cases such as replacing MLP layers with uGMM layers in discriminative networks, this limitation does not apply.
 ---
 ### Related Work
 * Peharz, R., Lang, S., Vergari, A., Stelzner, K., Molina, A., Trapp, M., Van den Broeck, G., Kersting, K., and Ghahramani, Z. Einsum networks: Fast and scalable learning of tractable probabilistic circuits. In *Proceedings of the 37th International Conference on Machine Learning (ICML)*. 2020.

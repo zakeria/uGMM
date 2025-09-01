@@ -1,9 +1,9 @@
 import torch
 from torch import nn
 
-class SPN(nn.Module):
+class uGMMNet(nn.Module):
     def __init__(self, device, dropout=0.0):
-        super(SPN, self).__init__()
+        super(uGMMNet, self).__init__()
         self.layers = nn.ModuleList()
         self.device = device
         self.dropout = dropout
@@ -37,9 +37,7 @@ class Layer(nn.Module):
         self._bernoulli_dist = torch.distributions.Bernoulli(probs=self.dropout)
 
     def _dropout(self, x: torch.Tensor):
-        dropout_indices = self._bernoulli_dist.sample(
-                x.shape,
-            ).float()
+        dropout_indices = self._bernoulli_dist.sample(x.shape,).float()
         dropout_indices[dropout_indices == 1] = -torch.inf
         return dropout_indices.to(self.device)
 
