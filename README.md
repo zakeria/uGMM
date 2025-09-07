@@ -19,7 +19,7 @@ Its associated Gaussian Mixture Model has exactly N components,
 each corresponding to one input. The means (μⱼ,ₖ), variances (σ²ⱼ,ₖ), and mixing coefficients (πⱼ,ₖ) are learnable parameters unique to neuron j.
 
 <p align="center">
-  <img src="https://github.com/zakeria/uGMM/raw/main/images/model_architecture.png" alt="example model architecture" width="700"/>
+  <img src="https://github.com/zakeria/uGMM/raw/main/images/model_architecture.png" alt="example model architecture" width="580"/>
 </p>
 
 ### Example Usage
