@@ -2,7 +2,7 @@
   <img src="https://github.com/zakeria/uGMM/raw/main/images/logo.png" alt="uGMM Logo" width="300"/>
 </p>
 
-## Univariate Gaussian Mixture Model Neural Network (uGMM-NN)
+## uGMM-NN: Univariate Gaussian Mixture Model Neural Network
 
 This repository introduces the **Univariate Gaussian Mixture Model Neural Network Model (uGMM-NN)**. This experimental feedforward neural network architecture replaces traditional neuron operations with **probabilistic univariate Gaussian mixture nodes**. By parameterizing neurons with means, variances, and mixing coefficients, uGMM-NNs capture multimodality and uncertainty that standard MLP neurons cannot represent. This mixture-based view allows richer probabilistic reasoning within deep neural networks, making them especially promising as building blocks for next-generation architectures.
 
@@ -27,7 +27,7 @@ each corresponding to one input. The means (μⱼ,ₖ), variances (σ²ⱼ,ₖ),
 The uGMM-NN follows a classic feedforward neural network architecture, comprising input, hidden, and output layers. Each neuron in the network represents a univariate Gaussian mixture model (uGMM), where the mixture components correspond to inputs from the previous layer. Conceptually, the model forms a hierarchical composition of uGMMs, enabling the construction of complex, high-dimensional probability distributions through successive transformations.
 
 #### Define the model
-Instead of adding dense layers, we stack uGMM layers that represent mixtures over inputs from the previous layer:
+Instead of adding dense layers, we stack univariate Gaussian Mixture layers (uGMM) that represent mixtures over inputs from the previous layer:
 ```python
 def mnist_fc_ugmm(device):
     n_variables = 28*28
