@@ -91,7 +91,7 @@ The `notebooks` directory contains Jupyter notebooks that demonstrate the usage 
 * Poon, H. and Domingos, P. Sum-product networks: A new deep architecture. In *2011 IEEE International Conference on Computer Vision Workshops (ICCV Workshops)*. IEEE, 2011.
 
 ### Citation
-For details on uGMM-NN, please refer to [the paper](https://arxiv.org/abs/2509.07569) and cite the software as shown below:
+For details on uGMM-NN, see [the paper](https://arxiv.org/abs/2509.07569), and to cite it, use:
 
 ```bibtex
 @article{Zakeria2025uGMM,
@@ -100,11 +100,4 @@ For details on uGMM-NN, please refer to [the paper](https://arxiv.org/abs/2509.0
   journal   = {arXiv preprint arXiv:2509.07569},
   year      = {2025},
   url       = {https://arxiv.org/abs/2509.07569}
-}
-
-@software{Zakeria2025uGMM,
-  author = {Zakeria Sharif Ali},
-  title = {{uGMM-NN: A Deep Probabilistic Model with Univariate Gaussian Mixture Nodes}},
-  url = {https://github.com/zakeria/ugmm},
-  year = {2025},
-}
+}}
