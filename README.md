@@ -103,7 +103,7 @@ For details on uGMM-NN, please refer to [the paper](https://arxiv.org/abs/2509.0
 }
 
 @software{Zakeria2025uGMM,
-  author = {Ali, Zakeria},
+  author = {Zakeria Sharif Ali},
   title = {{uGMM-NN: A Deep Probabilistic Model with Univariate Gaussian Mixture Nodes}},
   url = {https://github.com/zakeria/ugmm},
   year = {2025},
