@@ -83,12 +83,6 @@ The `notebooks` directory contains Jupyter notebooks that demonstrate the usage 
 - [Example (discriminative) inference on the MNIST dataset](./notebooks/mnist_dataset.ipynb)
 - [Example (generative) inference on the Iris dataset using a uGMM trained with NLL loss.](./notebooks/iris_dataset.ipynb)
 ---
-### Related Work
-* Peharz, R., Lang, S., Vergari, A., Stelzner, K., Molina, A., Trapp, M., Van den Broeck, G., Kersting, K., and Ghahramani, Z. Einsum networks: Fast and scalable learning of tractable probabilistic circuits. In *Proceedings of the 37th International Conference on Machine Learning (ICML)*. 2020.
-
-* Choi, Y., Vergari, A., and Van den Broeck, G. Probabilistic circuits: A unifying framework for tractable probabilistic models. 2020b.
-
-* Poon, H. and Domingos, P. Sum-product networks: A new deep architecture. In *2011 IEEE International Conference on Computer Vision Workshops (ICCV Workshops)*. IEEE, 2011.
 
 ### Citation
 For details on uGMM-NN, see [the paper](https://arxiv.org/abs/2509.07569), and to cite it, use:
