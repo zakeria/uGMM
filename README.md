@@ -6,7 +6,6 @@
 
 This repository introduces the **Univariate Gaussian Mixture Model Neural Network Model (uGMM-NN)**. This experimental feedforward neural network architecture replaces traditional neuron operations with **probabilistic univariate Gaussian mixture nodes**. By parameterizing neurons with means, variances, and mixing coefficients, uGMM-NNs capture multimodality and uncertainty that standard MLP neurons cannot represent. This mixture-based view allows richer probabilistic reasoning within deep neural networks, making them especially promising as building blocks for next-generation architectures.
 
----
 
 ### Model Formulation
 
@@ -21,6 +20,8 @@ each corresponding to one input. The means (μⱼ,ₖ), variances (σ²ⱼ,ₖ),
 <p align="center">
   <img src="https://github.com/zakeria/uGMM/raw/main/images/model_architecture.png" alt="example model architecture" width="580"/>
 </p>
+
+---
 
 ### Example Usage
 
