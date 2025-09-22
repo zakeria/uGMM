@@ -11,7 +11,6 @@ from torch import nn
 import torch.nn.functional as F
 
 from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
@@ -19,35 +18,42 @@ def predictNLLMPE(model, data, label, device, epoch):
     mpe = model.infer_mpe(data, mpe_vars=[4], mpe_states=[0.,1.,2.])
     predictions = mpe.argmax(dim=0).squeeze()
     accuracy = (predictions == label).sum() / len(label)
-    print(f'epoch: {epoch}%, MPE Accuracy: {accuracy}%')
+    print(f'epoch: {epoch}%, MPE Accuracy: {accuracy * 100}%')
 
 def Classify_iris_nll():
       device = "cuda"
       random_seed = 0
       torch.manual_seed(random_seed)
-      features, label = load_iris(return_X_y=True)
-      scaler = StandardScaler()
-      features = scaler.fit_transform(features)
-      features = torch.tensor(features, dtype=torch.float32).to(device)
-      label = torch.tensor(label, dtype=torch.int).to(device)
-      data = torch.cat([features, label.unsqueeze(1).int()], dim=1).to(device)
+
+      iris = load_iris()
+      X = iris.data
+      y = iris.target
+
+      X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+      X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
+      y_train_tensor = torch.tensor(y_train, dtype=torch.long)
+      X_train_tensor = torch.cat([X_train_tensor, y_train_tensor.unsqueeze(1).int()], dim=1).to(device)
+      
+      y_test_tensor = torch.tensor(y_test, dtype=torch.long).to(device)
+      X_test_tensor = torch.tensor(X_test, dtype=torch.float32).to(device)
+      X_test_tensor = torch.cat([X_test_tensor, y_test_tensor.unsqueeze(1).int()], dim=1).to(device)
 
       model = iris_nll_gmm(device)
-      optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+      optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-      test = True
-      for i in range(1000000):
-            optimizer.zero_grad()
-            output = model.infer(data, training=True)
-            loss = -1 * output.mean()
-            loss.backward()
-            optimizer.step()
+      train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+      train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+      
+      for epoch in range(300):
+            for batch_X, batch_y in train_loader:
+                  optimizer.zero_grad()
+                  output = model.infer(batch_X, training=True)
+                  loss = -1 * output.mean()
+                  loss.backward()
+                  optimizer.step()
 
-            if i % 200 == 0:
-                  print("log-likelihood: {output.sum().item():10.4f}")
-
-                  if test:
-                        predictNLLMPE(model, data, label, device, i)
+            predictNLLMPE(model, X_test_tensor, y_test_tensor, device, epoch)
 
 class MLP(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -67,9 +73,6 @@ def Classify_iris_mlp():
       X = iris.data
       y = iris.target
 
-      scaler = StandardScaler()
-      X = scaler.fit_transform(X)
-
       X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
       X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
@@ -81,14 +84,14 @@ def Classify_iris_mlp():
       train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 
       input_size = X_train.shape[1]
-      hidden_size = 32  
+      hidden_size = 32
       output_size = len(torch.unique(y_train_tensor))
 
       model = MLP(input_size, hidden_size, output_size)
       criterion = nn.CrossEntropyLoss()
-      optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+      optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-      for epoch in range(100):
+      for epoch in range(300):
             for batch_X, batch_y in train_loader:
                   optimizer.zero_grad()
                   outputs = model(batch_X)

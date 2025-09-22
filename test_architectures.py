@@ -9,10 +9,10 @@ def iris_nll_gmm(device):
     input_layer = InputLayer(n_variables=n_variables, n_var_nodes=5) 
     model.addLayer(input_layer)
 
-    g1 = uGMMLayer(prev_layer=model.layers[-1], n_ugmm_nodes=20)
+    g1 = uGMMLayer(prev_layer=model.layers[-1], n_ugmm_nodes=10)
     model.addLayer(g1)
     
-    g2 = uGMMLayer(prev_layer=model.layers[-1], n_ugmm_nodes=8)
+    g2 = uGMMLayer(prev_layer=model.layers[-1], n_ugmm_nodes=5)
     model.addLayer(g2)
 
     root = uGMMLayer(prev_layer=model.layers[-1], n_ugmm_nodes=1)
